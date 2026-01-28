@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}{{ topic.title }}{% endblock %}
+
+{% block content %}
+<h1>{{ topic.title }}</h1>
+
+<h3>Теория</h3>
+<div class="card mb-4">
+  <div class="card-body">
+    {{ topic.theory | safe }}
+  </div>
+</div>
+
+<h3>Формулы</h3>
+<div class="row mb-4">
+  {% for f in topic.formulas %}
+  <div class="col-md-4 mb-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5>{{ f.name }}</h5>
+        <p>$$ {{ f.latex }} $$</p>
+        <p>{{ f.description }}</p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<h3>Примеры задач</h3>
+<div class="row">
+  {% for ex in topic.examples %}
+  <div class="col-md-6 mb-3">
+    <div class="card border-secondary h-100">
+      <div class="card-body">
+        <h5>{{ ex.name }}</h5>
+        <p><strong>Условие:</strong> {{ ex.desc }}</p>
+        <p><strong>Решение:</strong></p>
+        <p>$$ {{ ex.solution }} $$</p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<a href="/" class="btn btn-secondary mt-4">← Назад</a>
+{% endblock %}
