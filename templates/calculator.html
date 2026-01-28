@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}
+Калькулятор
+{% endblock %}
+
+{% block content %}
+<h1>Калькулятор</h1>
+<p class="text-muted">
+  Арифметический и физический калькулятор для решения задач
+</p>
+
+<ul class="nav nav-tabs mb-4">
+  <li class="nav-item">
+    <a class="nav-link {% if active_tab == 'arithmetic' %}active{% endif %}"
+       href="?tab=arithmetic">
+      Арифметический
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if active_tab == 'physics' %}active{% endif %}"
+       href="?tab=physics">
+      Физические формулы
+    </a>
+  </li>
+</ul>
+
+{% if active_tab == 'arithmetic' %}
+<div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title">Арифметический калькулятор</h5>
+
+    <form method="post">
+      <input type="hidden" name="tab" value="arithmetic">
+
+      <input type="text"
+             class="form-control mb-3"
+             name="expression"
+             placeholder="Например: 2 + 2 * 2"
+             value="{{ arithmetic_expr or '' }}">
+
+      <button type="submit" class="btn btn-success">
+        Вычислить
+      </button>
+    </form>
+
+    {% if arithmetic_result is not none %}
+      <div class="alert alert-success mt-3">
+        <strong>Результат:</strong> {{ arithmetic_result }}
+      </div>
+    {% endif %}
+
+    {% if arithmetic_error %}
+      <div class="alert alert-danger mt-3">
+        {{ arithmetic_error }}
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+
+{% if active_tab == 'physics' %}
+<div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title">Калькулятор физических формул</h5>
+
+    <form method="post">
+      <input type="hidden" name="tab" value="physics">
+
+      <!-- Выбор раздела -->
+      <div class="mb-3">
+        <label class="form-label">Раздел физики</label>
+        <select class="form-select" name="topic_id" onchange="this.form.submit()">
+          <option value="">-- Выберите раздел --</option>
+          {% for topic_id, topic in topics.items() %}
+            <option value="{{ topic_id }}"
+              {% if selected_topic_key == topic_id %}selected{% endif %}>
+              {{ topic.title }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Выбор формулы -->
+      {% if selected_topic %}
+      <div class="mb-3">
+        <label class="form-label">Формула</label>
+        <select class="form-select" name="formula_id" onchange="this.form.submit()">
+          <option value="">-- Выберите формулу --</option>
+          {% for f in selected_topic['formulas'] %}
+            <option value="{{ f['id'] }}"
+              {% if selected_formula and f['id'] == selected_formula['id'] %}selected{% endif %}>
+              {{ f['name'] }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      {% endif %}
+
+      <!-- Ввод значений -->
+      {% if selected_formula %}
+      <div class="alert alert-info">
+        $$ {{ selected_formula['latex'] }} $$
+      </div>
+
+      {% for var in selected_formula['vars'] %}
+      <div class="mb-3">
+        <label class="form-label">{{ var }}</label>
+        <input type="number"
+               step="any"
+               class="form-control"
+               name="{{ var }}"
+               required>
+      </div>
+      {% endfor %}
+
+      <button type="submit" class="btn btn-primary" name="calculate" value="1">
+        Рассчитать
+      </button>
+      {% endif %}
+    </form>
+
+    {% if formula_result is not none %}
+      <div class="alert alert-success mt-3">
+        <strong>Результат:</strong> {{ formula_result }}
+      </div>
+    {% endif %}
+
+    {% if formula_error %}
+      <div class="alert alert-danger mt-3">
+        {{ formula_error }}
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+<a href="/" class="btn btn-secondary">← На главную</a>
+{% endblock %}
