@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}
+    Виселица
+{% endblock %}
+
+{% block content %}
+<h1>🎮 Виселица: физические термины</h1>
+
+<h3><strong>Опыт: </strong>{{ xp }}</h3>
+
+<div class="hangman-container">
+
+    <svg class="hangman-svg" width="300" height="300" viewBox="0 0 300 300">
+        <line x1="50" y1="280" x2="250" y2="280" />
+        <line x1="100" y1="280" x2="100" y2="40" />
+        <line x1="100" y1="40" x2="200" y2="40" />
+        <line x1="200" y1="40" x2="200" y2="70" />
+
+        {% if errors > 0 %}
+            <circle class="part" cx="200" cy="95" r="25" />
+        {% endif %}
+        {% if errors > 1 %}
+            <line class="part" x1="200" y1="120" x2="200" y2="200" />
+        {% endif %}
+        {% if errors > 2 %}
+            <line class="part" x1="200" y1="135" x2="170" y2="160" />
+        {% endif %}
+        {% if errors > 3 %}
+            <line class="part" x1="200" y1="135" x2="230" y2="160" />
+        {% endif %}
+        {% if errors > 4 %}
+            <line class="part" x1="200" y1="200" x2="175" y2="250" />
+        {% endif %}
+        {% if errors > 5 %}
+            <line class="part" x1="200" y1="200" x2="225" y2="250" />
+        {% endif %}
+    </svg>
+
+    <div class="word">
+        {{ word_display }}
+    </div>
+
+    <form method="post" class="mt-3">
+        
+        <input type="text" name="letter" maxlength="1" pattern="[А-Яа-яЁё]" required autofocus class="form-control text-center mb-3" placeholder="Введите букву">
+        <button class="btn btn-success">Проверить букву</button>
+    </form>
+
+    {% if error_message %}
+        <div class="alert alert-danger mt-3">
+            {{ error_message }}
+        </div>
+    {% endif %}
+    
+    <a href="?hint=1" class="btn btn-warning mt-3">
+        Подсказка (-10 XP)
+    </a>
+    
+    <h4 class="mt-3">Угаданные буквы: {{ guessed | join(", ") }}</h4>
+    <h4>Ошибки: {{ errors }} из 6 возможных</h4>
+    
+    {% if message %}
+        <div class="alert alert-info mt-3">
+            {{ message }}
+        </div>
+        <a href="/hangman" class="btn btn-primary mt-3">Новая игра</a>
+    {% endif %}
+</div>
+{% endblock %}
