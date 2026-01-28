@@ -1,0 +1,22 @@
+.hangman-svg line,
+.hangman-svg circle {
+    stroke: #1c235f;
+    stroke-width: 4;
+    fill: none;
+}
+
+.part {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.word {
+    font-size: 32px;
+    letter-spacing: 8px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
