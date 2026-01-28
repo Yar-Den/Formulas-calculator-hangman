@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<h1>Разделы физики</h1>
+
+<div class="row">
+  {% for topic_id, topic in topics.items() %}
+  <div class="col-md-4 mb-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5>{{ topic.title }}</h5>
+
+        <p class="card-text">
+          Формул в теме: {{ topic.formulas | length }}
+        </p>
+
+        <p>{{ topic.theory | striptags | truncate(80) }}</p>
+
+        <a href="/topic/{{ topic_id }}" class="btn btn-primary">Открыть</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
